@@ -5,6 +5,7 @@
 #include "cameraclass.h"
 #include "modelclass.h"
 #include "colorshaderclass.h"
+#include "textureshaderclass.h"
 
 //Global Variables that we may want to change, e.g. windowed or full screen mode
 const bool FULL_SCREEN = false;
@@ -32,7 +33,8 @@ private:
 	D3DClass* m_Direct3D;
 	CameraClass* m_Camera;
 	ModelClass* m_Model;
-	ColorShaderClass* m_ColorShader;
+	//ColorShaderClass* m_ColorShader;
+	TextureShaderClass* m_TextureShader;
 
 };
 #endif
