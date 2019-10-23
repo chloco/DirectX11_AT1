@@ -129,9 +129,19 @@ void GraphicsClass::Shutdown() //shutdown of all the graphics objects occur here
 
 bool GraphicsClass::Frame() //calls the render function in each frame
 {
+	m_Input = new InputClass;
+
+	XMFLOAT3 pos = m_Camera->GetPosition();
+	if (m_Input->IsKeyDown(57))
+	{
+		pos.x += 10;
+		m_Camera->SetPosition(pos.x,pos.y,pos.z);
+	}
+	
+
+
 	bool result;
-
-
+	
 	// Render the graphics scene.
 	result = Render();
 	if (!result)	//check if render is returned correctly

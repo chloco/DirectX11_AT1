@@ -6,6 +6,8 @@
 #include "modelclass.h"
 #include "colorshaderclass.h"
 #include "textureshaderclass.h"
+#include "graphicsclass.h"
+#include "inputclass.h"
 
 //Global Variables that we may want to change, e.g. windowed or full screen mode
 const bool FULL_SCREEN = false;
@@ -35,6 +37,7 @@ private:
 	ModelClass* m_Model;
 	//ColorShaderClass* m_ColorShader;
 	TextureShaderClass* m_TextureShader;
+	InputClass* m_Input;
 
 };
 #endif
