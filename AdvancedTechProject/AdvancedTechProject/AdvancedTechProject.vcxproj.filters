@@ -16,6 +16,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{85898780-f23c-45d7-866c-295012fb72ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{9bc2e17d-0701-40ea-8c40-ed11abb0ab6c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -91,5 +94,10 @@
     <None Include="texture.ps">
       <Filter>Shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="F:\Year 3\AT\DirectX11_AT1\AdvancedTechProject\AdvancedTechProject\bin\bluesky.tga">
+      <Filter>data</Filter>
+    </Image>
   </ItemGroup>
 </Project>

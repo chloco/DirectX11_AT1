@@ -13,27 +13,31 @@ TextureShaderClass::TextureShaderClass(const TextureShaderClass& other)
 {
 }
 
+
 TextureShaderClass::~TextureShaderClass()
 {
 }
+
 
 bool TextureShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 {
 	bool result;
 
-	//initialize the vertex and pixel shaders.
+	// Initialize the vertex and pixel shaders.
 	result = InitializeShader(device, hwnd, L"texture.vs", L"texture.ps");
 	if (!result)
 	{
 		return false;
 	}
+
 	return true;
 }
 
 void TextureShaderClass::Shutdown()
 {
-	//shutdown the vertex ad pixel shaders as well as the related objects
+	// Shutdown the vertex and pixel shaders as well as the related objects.
 	ShutdownShader();
+
 	return;
 }
 
@@ -42,14 +46,15 @@ bool TextureShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCou
 {
 	bool result;
 
-	//set the shader parameters that it will use for rendering.
+
+	// Set the shader parameters that it will use for rendering.
 	result = SetShaderParameters(deviceContext, worldMatrix, viewMatrix, projectionMatrix, texture);
 	if (!result)
 	{
 		return false;
 	}
 
-	//mow the rednder the prepared buffers with the shader
+	// Now render the prepared buffers with the shader.
 	RenderShader(deviceContext, indexCount);
 
 	return true;
@@ -73,31 +78,52 @@ bool TextureShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR
 	vertexShaderBuffer = 0;
 	pixelShaderBuffer = 0;
 
-	//Compile the vertex shader code
+	// Compile the vertex shader code.
 	result = D3DCompileFromFile(vsFilename, NULL, NULL, "TextureVertexShader", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0,
 		&vertexShaderBuffer, &errorMessage);
-
 	if (FAILED(result))
 	{
-		//if the shader fails to compile then it should write an error message
+		// If the shader failed to compile it should have writen something to the error message.
 		if (errorMessage)
 		{
 			OutputShaderErrorMessage(errorMessage, hwnd, vsFilename);
 		}
-		//if nothing in the error message then it simply cant find the shader file itself
+		// If there was nothing in the error message then it simply could not find the shader file itself.
 		else
 		{
 			MessageBox(hwnd, vsFilename, L"Missing Shader File", MB_OK);
 		}
+
 		return false;
 	}
 
-	//create the vertex shader from the buffer
+	// Compile the pixel shader code.
+	result = D3DCompileFromFile(psFilename, NULL, NULL, "TexturePixelShader", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0,
+		&pixelShaderBuffer, &errorMessage);
+	if (FAILED(result))
+	{
+		// If the shader failed to compile it should have writen something to the error message.
+		if (errorMessage)
+		{
+			OutputShaderErrorMessage(errorMessage, hwnd, psFilename);
+		}
+		// If there was nothing in the error message then it simply could not find the file itself.
+		else
+		{
+			MessageBox(hwnd, psFilename, L"Missing Shader File", MB_OK);
+		}
+
+		return false;
+	}
+
+	// Create the vertex shader from the buffer.
 	result = device->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
 	if (FAILED(result))
 	{
 		return false;
 	}
+
+	// Create the pixel shader from the buffer.
 	result = device->CreatePixelShader(pixelShaderBuffer->GetBufferPointer(), pixelShaderBuffer->GetBufferSize(), NULL, &m_pixelShader);
 	if (FAILED(result))
 	{
@@ -122,14 +148,12 @@ bool TextureShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR
 	polygonLayout[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 	polygonLayout[1].InstanceDataStepRate = 0;
 
-	//get a count of the elements in the layour
+	// Get a count of the elements in the layout.
 	numElements = sizeof(polygonLayout) / sizeof(polygonLayout[0]);
 
-	//create the vertex input layout
-
+	// Create the vertex input layout.
 	result = device->CreateInputLayout(polygonLayout, numElements, vertexShaderBuffer->GetBufferPointer(),
 		vertexShaderBuffer->GetBufferSize(), &m_layout);
-
 	if (FAILED(result))
 	{
 		return false;
@@ -184,13 +208,14 @@ bool TextureShaderClass::InitializeShader(ID3D11Device* device, HWND hwnd, WCHAR
 
 void TextureShaderClass::ShutdownShader()
 {
-	//release the sampler state
+	// Release the sampler state.
 	if (m_sampleState)
 	{
 		m_sampleState->Release();
 		m_sampleState = 0;
 	}
 
+	// Release the matrix constant buffer.
 	if (m_matrixBuffer)
 	{
 		m_matrixBuffer->Release();
@@ -264,35 +289,39 @@ bool TextureShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext,
 	MatrixBufferType* dataPtr;
 	unsigned int bufferNumber;
 
-	//Transpose the matrices to prepare them for the shader.
+
+	// Transpose the matrices to prepare them for the shader.
 	worldMatrix = XMMatrixTranspose(worldMatrix);
 	viewMatrix = XMMatrixTranspose(viewMatrix);
 	projectionMatrix = XMMatrixTranspose(projectionMatrix);
 
-	//lock the constant bufer so it can be written to
+	// Lock the constant buffer so it can be written to.
 	result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
-
 	if (FAILED(result))
 	{
 		return false;
 	}
 
-	//get a pointer to the data in the constant buffer
+	// Get a pointer to the data in the constant buffer.
 	dataPtr = (MatrixBufferType*)mappedResource.pData;
 
-	//copy the matrices into the constant buffer
+	// Copy the matrices into the constant buffer.
 	dataPtr->world = worldMatrix;
 	dataPtr->view = viewMatrix;
 	dataPtr->projection = projectionMatrix;
 
-	//unlock the constant buffer
+	// Unlock the constant buffer.
 	deviceContext->Unmap(m_matrixBuffer, 0);
 
-	//set the position of the constant buffer in the vertex shader with the updated values
-	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+	// Set the position of the constant buffer in the vertex shader.
+	bufferNumber = 0;
 
-	// Set shader texture resource in the pixel shader.
-	deviceContext->PSSetShaderResources(0, 1, &texture);
+	// Finanly set the constant buffer in the vertex shader with the updated values.
+	deviceContext->VSSetConstantBuffers(bufferNumber, 1, &m_matrixBuffer);
+	//The SetShaderParameters function has been modified from the previous tutorial to include setting the texture in the pixel shader now.
+
+		// Set shader texture resource in the pixel shader.
+		deviceContext->PSSetShaderResources(0, 1, &texture);
 
 	return true;
 }

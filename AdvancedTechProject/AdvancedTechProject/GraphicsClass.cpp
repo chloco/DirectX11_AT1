@@ -57,7 +57,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 	}
 
 	// Initialize the model object.
-	result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "../AdvancedTechProject/bin/bluesky.tga");
+	result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "stone02.tga");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
@@ -148,7 +148,7 @@ bool GraphicsClass::Render()
 
 
 	// Clear the buffers to begin the scene.
-	m_Direct3D->BeginScene(0.0f, 0.0f, 0.0f, 1.0f);
+	m_Direct3D->BeginScene(1.0f, 0.0f, 0.5f, 1.0f);
 
 	// Generate the view matrix based on the camera's position.
 	m_Camera->Render();
