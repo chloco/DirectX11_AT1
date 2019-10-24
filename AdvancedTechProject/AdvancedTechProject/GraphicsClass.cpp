@@ -19,7 +19,7 @@ GraphicsClass::~GraphicsClass()
 }
 
 
-bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd) 
+bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd, InputClass* input)
 {
 	bool result;
 
@@ -81,7 +81,7 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
 		return false;
 	}
 
-
+	m_Input = input;
 
 	return true;
 }
@@ -129,16 +129,64 @@ void GraphicsClass::Shutdown() //shutdown of all the graphics objects occur here
 
 bool GraphicsClass::Frame() //calls the render function in each frame
 {
-	m_Input = new InputClass;
 
 	XMFLOAT3 pos = m_Camera->GetPosition();
-	if (m_Input->IsKeyDown(57))
+	XMFLOAT3 rot = m_Camera->GetRotation();
+	//W MOVES UP
+	if (m_Input->IsKeyDown(0x57) == true)
 	{
-		pos.x += 10;
+		pos.y += 0.05;
 		m_Camera->SetPosition(pos.x,pos.y,pos.z);
 	}
-	
 
+	//S MOVES DOWN
+	if (m_Input->IsKeyDown(0x53) == true)
+	{
+		pos.y -= 0.05;
+		m_Camera->SetPosition(pos.x, pos.y, pos.z);
+	}
+	
+	//A MOVES LEFT
+	if (m_Input->IsKeyDown(0x41) == true)
+	{
+		pos.x -= 0.05;
+		m_Camera->SetPosition(pos.x, pos.y, pos.z);
+	}
+
+	//D MOVES RIGHT
+	if (m_Input->IsKeyDown(0x44) == true)
+	{
+		pos.x += 0.05;
+		m_Camera->SetPosition(pos.x, pos.y, pos.z);
+	}
+
+	//W AND SHIFT MOVES FORWARD
+	if (m_Input->IsKeyDown(0x57) == true && m_Input->IsKeyDown(0x10))
+	{
+		pos.z += 0.05;
+		m_Camera->SetPosition(pos.x, pos.y, pos.z);
+	}
+
+	//S AND SHIFT MOVES BACKWARDS
+	if (m_Input->IsKeyDown(0x53) == true && m_Input->IsKeyDown(0x10))
+	{
+		pos.z -= 0.05;
+		m_Camera->SetPosition(pos.x, pos.y, pos.z);
+	}
+
+	//Q ROTATES CAM
+	if (m_Input->IsKeyDown(0x51) == true)
+	{
+		rot.y -= 0.5;
+		m_Camera->SetRotation(rot.x, rot.y, rot.z);
+	}
+
+	//E ROTATES CAM
+	if (m_Input->IsKeyDown(0x45) == true)
+	{
+		rot.y += 0.5;
+		m_Camera->SetRotation(rot.x, rot.y, rot.z);
+	}
 
 	bool result;
 	

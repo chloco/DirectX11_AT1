@@ -24,7 +24,7 @@ public:
 	GraphicsClass(const GraphicsClass&);
 	~GraphicsClass();
 
-	bool Initialize(int, int, HWND);
+	bool Initialize(int, int, HWND, InputClass*);
 	void Shutdown();
 	bool Frame();
 
