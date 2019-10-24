@@ -37,6 +37,10 @@ private:
 		float nx, ny, nz;
 	};
 
+	struct InstanceType
+	{
+		XMFLOAT3 position;
+	};
 
 public:
 	ModelClass();
@@ -50,6 +54,8 @@ public:
 
 	int GetIndexCount();
 
+	int GetVertexCount();
+	int GetInstanceCount();
 	ID3D11ShaderResourceView* GetTexture();
 
 private:
@@ -65,11 +71,12 @@ private:
 	void ReleaseModel();
 
 private:
-	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer;
+	ID3D11Buffer *m_vertexBuffer;
+	ID3D11Buffer *m_instanceBuffer;
 	int m_vertexCount, m_indexCount;
 
 	TextureClass* m_Texture;
-
+	int m_instanceCount;
 	ModelType* m_model;
 
 };

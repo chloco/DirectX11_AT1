@@ -47,8 +47,10 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd, Inp
 	}
 
 	// Set the initial position of the camera.
-	m_Camera->SetPosition(-2.0f, -0.5f, -5.0f);
-	m_Camera->SetRotation(0.0f, 30.0f ,0.0f);
+	//m_Camera->SetPosition(-2.0f, -0.5f, -5.0f);
+	//m_Camera->SetRotation(0.0f, 30.0f ,0.0f);
+	m_Camera->SetPosition(0.0f, 0.0f, -5.0f);
+	m_Camera->SetRotation(0.0f, 0.0f, 0.0f);
 
 	// Create the model object.
 	m_Model = new ModelClass;
@@ -132,20 +134,34 @@ bool GraphicsClass::Frame() //calls the render function in each frame
 
 	XMFLOAT3 pos = m_Camera->GetPosition();
 	XMFLOAT3 rot = m_Camera->GetRotation();
+	
 	//W MOVES UP
-	if (m_Input->IsKeyDown(0x57) == true)
+	if (m_Input->IsKeyDown(0x57) == true && m_Input->IsKeyDown(0x10))
 	{
-		pos.y += 0.05;
+			pos.y += 0.05;
 		m_Camera->SetPosition(pos.x,pos.y,pos.z);
 	}
 
+	///W AND SHIFT MOVES FORWARD
+	else if (m_Input->IsKeyDown(0x57) == true)
+	{
+		pos.z += 0.05;
+		m_Camera->SetPosition(pos.x, pos.y, pos.z);
+	
+	}
 	//S MOVES DOWN
-	if (m_Input->IsKeyDown(0x53) == true)
+	if (m_Input->IsKeyDown(0x53) == true && m_Input->IsKeyDown(0x10))
 	{
 		pos.y -= 0.05;
 		m_Camera->SetPosition(pos.x, pos.y, pos.z);
 	}
-	
+	//S AND SHIFT MOVES BACKWARDS
+	else if (m_Input->IsKeyDown(0x53) == true)
+	{
+		pos.z -= 0.05;
+		m_Camera->SetPosition(pos.x, pos.y, pos.z);
+
+	}
 	//A MOVES LEFT
 	if (m_Input->IsKeyDown(0x41) == true)
 	{
@@ -160,31 +176,18 @@ bool GraphicsClass::Frame() //calls the render function in each frame
 		m_Camera->SetPosition(pos.x, pos.y, pos.z);
 	}
 
-	//W AND SHIFT MOVES FORWARD
-	if (m_Input->IsKeyDown(0x57) == true && m_Input->IsKeyDown(0x10))
-	{
-		pos.z += 0.05;
-		m_Camera->SetPosition(pos.x, pos.y, pos.z);
-	}
-
-	//S AND SHIFT MOVES BACKWARDS
-	if (m_Input->IsKeyDown(0x53) == true && m_Input->IsKeyDown(0x10))
-	{
-		pos.z -= 0.05;
-		m_Camera->SetPosition(pos.x, pos.y, pos.z);
-	}
 
 	//Q ROTATES CAM
 	if (m_Input->IsKeyDown(0x51) == true)
 	{
-		rot.y -= 0.5;
+		rot.y -= 1;
 		m_Camera->SetRotation(rot.x, rot.y, rot.z);
 	}
 
 	//E ROTATES CAM
 	if (m_Input->IsKeyDown(0x45) == true)
 	{
-		rot.y += 0.5;
+		rot.y += 1;
 		m_Camera->SetRotation(rot.x, rot.y, rot.z);
 	}
 
@@ -221,7 +224,8 @@ bool GraphicsClass::Render()
 	m_Model->Render(m_Direct3D->GetDeviceContext());
 
 	// Render the model using the texture shader.
-	result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetIndexCount(), worldMatrix, viewMatrix, projectionMatrix, m_Model->GetTexture());
+	result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetVertexCount(), m_Model->GetInstanceCount(), worldMatrix, viewMatrix,
+		projectionMatrix, m_Model->GetTexture());
 	if (!result)
 	{
 		return false;
