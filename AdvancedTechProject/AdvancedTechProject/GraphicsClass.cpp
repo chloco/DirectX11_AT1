@@ -6,6 +6,8 @@ GraphicsClass::GraphicsClass() //constructor
 	m_Camera = 0;
 	m_Model = 0;
 	m_TextureShader = 0;
+	m_CatModel = 0;
+	m_Input = 0;
 }
 
 
@@ -54,19 +56,32 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd, Inp
 
 	// Create the model object.
 	m_Model = new ModelClass;
+	m_CatModel = new ModelClass;
 	if (!m_Model)
+	{
+		return false;
+	}
+	if (!m_CatModel)
 	{
 		return false;
 	}
 
 	// Initialize the model object.
-	result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "stone02.tga","cube.txt.");
+	result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "fur.tga","cat.txt.");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
 
+	result = m_CatModel->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "stone02.tga", "treadmill.txt.");
+	if (!result)
+	{
+		MessageBox(hwnd, L"Could not initialize the cat model object.", L"Error", MB_OK);
+		return false;
+	}
+
+	//free hong kong
 	// Create the color shader object.
 // Create the texture shader object.
 	m_TextureShader = new TextureShaderClass;
@@ -112,6 +127,13 @@ void GraphicsClass::Shutdown() //shutdown of all the graphics objects occur here
 		m_Model = 0;
 	}
 
+	if (m_CatModel)
+	{
+		m_CatModel->Shutdown();
+		delete m_CatModel;
+		m_CatModel = 0;
+	}
+
 	// Release the camera object.
 	if (m_Camera)
 	{
@@ -138,7 +160,7 @@ bool GraphicsClass::Frame() //calls the render function in each frame
 	//W MOVES UP
 	if (m_Input->IsKeyDown(0x57) == true && m_Input->IsKeyDown(0x10))
 	{
-			pos.y += 0.05;
+		pos.y += 0.05;
 		m_Camera->SetPosition(pos.x,pos.y,pos.z);
 	}
 
@@ -163,7 +185,7 @@ bool GraphicsClass::Frame() //calls the render function in each frame
 
 	}
 	//A MOVES LEFT
-	if (m_Input->IsKeyDown(0x41) == true)
+	if (m_Input->IsKeyDown('A') == true)
 	{
 		pos.x -= 0.05;
 		m_Camera->SetPosition(pos.x, pos.y, pos.z);
@@ -231,6 +253,15 @@ bool GraphicsClass::Render()
 		return false;
 	}
 
+	m_CatModel->Render(m_Direct3D->GetDeviceContext());
+
+	// Render the model using the treadmill texture shader.
+	result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_CatModel->GetVertexCount(), m_CatModel->GetInstanceCount(), worldMatrix, viewMatrix,
+		projectionMatrix, m_CatModel->GetTexture());
+	if (!result)
+	{
+		return false;
+	}
 	// Present the rendered scene to the screen.
 	m_Direct3D->EndScene();
 

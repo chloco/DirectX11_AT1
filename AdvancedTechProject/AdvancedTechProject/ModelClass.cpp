@@ -197,7 +197,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	//delete[] indices;
 	//indices = 0;
 	// Set the number of instances in the array.
-	m_instanceCount = 4;
+	m_instanceCount = 1;
 
 
 	// Create the instance array.
@@ -209,9 +209,10 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 
 	// Load the instance array with data.
 	instances[0].position = XMFLOAT3(-1.5f, -1.5f, 5.0f);
-	instances[1].position = XMFLOAT3(-1.5f, 1.5f, 5.0f);
-	instances[2].position = XMFLOAT3(1.5f, -1.5f, 5.0f);
-	instances[3].position = XMFLOAT3(1.5f, 1.5f, 5.0f);
+
+	//instances[1].position = XMFLOAT3(-1.5f, 1.5f, 5.0f);
+	//instances[2].position = XMFLOAT3(1.5f, -1.5f, 5.0f);
+	//instances[3].position = XMFLOAT3(1.5f, 1.5f, 5.0f);
 
 
 	// Set up the description of the instance buffer.
@@ -297,7 +298,7 @@ void ModelClass::RenderBuffers(ID3D11DeviceContext* deviceContext)
 	//deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
 	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	return;
 }
