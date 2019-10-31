@@ -20,7 +20,7 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: ModelClass
 ////////////////////////////////////////////////////////////////////////////////
-class ModelClass
+class ModelClass 
 {
 private:
 	struct VertexType
@@ -40,6 +40,8 @@ private:
 	struct InstanceType
 	{
 		XMFLOAT3 position;
+		XMFLOAT3 scale;
+		
 	};
 
 public:
@@ -52,10 +54,14 @@ public:
 	void Shutdown();
 	void Render(ID3D11DeviceContext*);
 
+	void setPosition(float, float ,float);
+	XMFLOAT3 getPosition();
+
 	int GetIndexCount();
 
 	int GetVertexCount();
 	int GetInstanceCount();
+	int GetCatInstanceCount();
 	ID3D11ShaderResourceView* GetTexture();
 
 private:
@@ -73,11 +79,17 @@ private:
 private:
 	ID3D11Buffer *m_vertexBuffer;
 	ID3D11Buffer *m_instanceBuffer;
+	ID3D11Buffer* m_instanceCatBuffer;
 	int m_vertexCount, m_indexCount;
 
 	TextureClass* m_Texture;
 	int m_instanceCount;
+	int m_instanceCountCats;
 	ModelType* m_model;
+
+	float xPos;
+	float yPos;
+	float zPos;
 
 };
 

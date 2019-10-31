@@ -66,15 +66,16 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd, Inp
 		return false;
 	}
 
+
 	// Initialize the model object.
-	result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "happyfur.tga","cat2.txt.");
+	result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "treadmill.tga","treadmill.txt.");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
 
-	result = m_CatModel->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "treadmill.tga", "treadmill.txt.");
+	result = m_CatModel->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "happyfur.tga", "cat2.txt.");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the cat model object.", L"Error", MB_OK);
@@ -156,7 +157,10 @@ bool GraphicsClass::Frame() //calls the render function in each frame
 
 	XMFLOAT3 pos = m_Camera->GetPosition();
 	XMFLOAT3 rot = m_Camera->GetRotation();
-	
+	//XMFLOAT3 catPos = m_CatModel->getPosition();
+
+
+	//m_CatModel->setPosition(catPos.y, catPos.x, catPos.y);
 	//W MOVES UP
 	if (m_Input->IsKeyDown(0x57) == true && m_Input->IsKeyDown(0x10))
 	{
@@ -241,6 +245,7 @@ bool GraphicsClass::Render()
 	m_Direct3D->GetWorldMatrix(worldMatrix);
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->GetProjectionMatrix(projectionMatrix);
+	//m_CatModel->
 
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	m_Model->Render(m_Direct3D->GetDeviceContext());
