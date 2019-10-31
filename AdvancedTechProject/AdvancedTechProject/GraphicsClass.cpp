@@ -67,14 +67,14 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd, Inp
 	}
 
 	// Initialize the model object.
-	result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "fur.tga","cat.txt.");
+	result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "happyfur.tga","cat2.txt.");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the model object.", L"Error", MB_OK);
 		return false;
 	}
 
-	result = m_CatModel->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "stone02.tga", "treadmill.txt.");
+	result = m_CatModel->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "treadmill.tga", "treadmill.txt.");
 	if (!result)
 	{
 		MessageBox(hwnd, L"Could not initialize the cat model object.", L"Error", MB_OK);
