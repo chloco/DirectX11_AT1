@@ -66,6 +66,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd, Inp
 		return false;
 	}
 
+	m_CatModel->setPosition(-5.0f, -1.5f, 5.0f);
+
 
 	// Initialize the model object.
 	result = m_Model->Initialize(m_Direct3D->GetDevice(), m_Direct3D->GetDeviceContext(), "treadmill.tga","treadmill.txt.");
@@ -157,8 +159,6 @@ bool GraphicsClass::Frame() //calls the render function in each frame
 
 	XMFLOAT3 pos = m_Camera->GetPosition();
 	XMFLOAT3 rot = m_Camera->GetRotation();
-	//XMFLOAT3 catPos = m_CatModel->getPosition();
-
 
 	//m_CatModel->setPosition(catPos.y, catPos.x, catPos.y);
 	//W MOVES UP

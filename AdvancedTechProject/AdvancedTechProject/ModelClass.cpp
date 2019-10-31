@@ -149,7 +149,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	// Load the vertex array and index array with data.
 	for (i = 0; i < m_vertexCount; i++)
 	{
-		vertices[i].position = XMFLOAT3(m_model[i].x, m_model[i].y, m_model[i].z);
+		vertices[i].position = XMFLOAT3(m_model[i].x + xPos, m_model[i].y + yPos, m_model[i].z + zPos);
 		vertices[i].texture = XMFLOAT2(m_model[i].tu, m_model[i].tv);
 		vertices[i].normal = XMFLOAT3(m_model[i].nx, m_model[i].ny, m_model[i].nz);
 
@@ -173,7 +173,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	//indices[1] = 1;  // Top middle.
 	//indices[2] = 2;  // Bottom right.
 
-					 // Set up the description of the static vertex buffer.
+	// Set up the description of the static vertex buffer.
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	vertexBufferDesc.ByteWidth = sizeof(VertexType) * m_vertexCount;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
