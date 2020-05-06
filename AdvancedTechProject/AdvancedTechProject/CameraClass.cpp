@@ -17,6 +17,7 @@ CameraClass::CameraClass()
 
 CameraClass::CameraClass(const CameraClass& other)
 {
+
 }
 
 

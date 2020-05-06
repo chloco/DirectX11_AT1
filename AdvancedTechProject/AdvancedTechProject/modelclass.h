@@ -41,7 +41,6 @@ private:
 	{
 		XMFLOAT3 position;
 		XMFLOAT3 scale;
-		
 	};
 
 public:
@@ -55,7 +54,12 @@ public:
 	void Render(ID3D11DeviceContext*);
 
 	void setPosition(float, float ,float);
+	void setScale(float, float, float);
+
+	void doSize();
+
 	XMFLOAT3 getPosition();
+	XMFLOAT3 getScale();
 
 	int GetIndexCount();
 
@@ -80,6 +84,7 @@ private:
 	ID3D11Buffer *m_vertexBuffer;
 	ID3D11Buffer *m_instanceBuffer;
 	ID3D11Buffer* m_instanceCatBuffer;
+	XMMATRIX Scale();
 	int m_vertexCount, m_indexCount;
 
 	TextureClass* m_Texture;
@@ -91,6 +96,16 @@ private:
 	float yPos;
 	float zPos;
 
+	float xScale;
+	float yScale;
+	float zScale;
+
+	XMMATRIX cat;
+	XMMATRIX treadmill;
+
+	XMMATRIX Rotation;
+	XMMATRIX Scale;
+	XMMATRIX Translation;
 };
 
 #endif

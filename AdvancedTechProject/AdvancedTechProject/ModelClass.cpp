@@ -13,6 +13,9 @@ ModelClass::ModelClass()
 	xPos = 0;
 	yPos = 0;
 	zPos = 0;
+	xScale = 1;
+	yScale = 1;
+	zScale = 1;
 
 }
 
@@ -24,6 +27,7 @@ ModelClass::ModelClass(const ModelClass& other)
 
 ModelClass::~ModelClass()
 {
+
 }
 
 bool ModelClass::Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceContext, char* textureFilename, char* modelFilename)
@@ -105,11 +109,33 @@ XMFLOAT3 ModelClass::getPosition()
 	return position;
 }
 
+XMFLOAT3 ModelClass::getScale()
+{
+	XMFLOAT3 scale = { xScale, yScale, zScale };
+	return scale;
+}
+
+XMMATRIX ModelClass::Scale()
+{
+	
+	FLOAT ScaleX;    // x=axis scale
+	FLOAT ScaleY;     // y-axis scale
+	FLOAT ScaleZ;    // z-axis scale
+
+}
+
 void ModelClass::setPosition(float x, float y, float z)
 {
 	xPos = x;
 	yPos = y;
 	zPos = z;
+}
+
+void ModelClass::setScale(float x, float y, float z)
+{
+	xScale = x;
+	yScale = y;
+	zScale = z;
 }
 
 bool ModelClass::InitializeBuffers(ID3D11Device* device)
@@ -149,29 +175,12 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	// Load the vertex array and index array with data.
 	for (i = 0; i < m_vertexCount; i++)
 	{
-		vertices[i].position = XMFLOAT3(m_model[i].x + xPos, m_model[i].y + yPos, m_model[i].z + zPos);
+		vertices[i].position = XMFLOAT3((m_model[i].x + xPos)* xScale, (m_model[i].y + yPos) * yScale, (m_model[i].z + zPos) * zScale);
 		vertices[i].texture = XMFLOAT2(m_model[i].tu, m_model[i].tv);
 		vertices[i].normal = XMFLOAT3(m_model[i].nx, m_model[i].ny, m_model[i].nz);
-
 		//indices[i] = i;
 	}
 
-	///HERE WE MAKE THE ACTUAL TRIANGLE!!
-	//// Load the vertex array with data.
-	//vertices[0].position = XMFLOAT3(-1.0f, -1.0f, 0.0f);  // Bottom left.
-	//vertices[0].texture = XMFLOAT2(0.0f, 1.0f);
-
-	//vertices[1].position = XMFLOAT3(0.0f, 1.0f, 0.0f);  // Top middle.
-	//vertices[1].texture = XMFLOAT2(0.5f, 0.0f);
-
-	//vertices[2].position = XMFLOAT3(1.0f, -1.0f, 0.0f);  // Bottom right.
-	//vertices[2].texture = XMFLOAT2(1.0f, 1.0f);
-
-	/////OG TRIANGLE
-	//// Load the index array with data.
-	//indices[0] = 0;  // Bottom left.
-	//indices[1] = 1;  // Top middle.
-	//indices[2] = 2;  // Bottom right.
 
 	// Set up the description of the static vertex buffer.
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -221,7 +230,7 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	//indices = 0;
 	// Set the number of instances in the array.
 	m_instanceCount = 3;
-	//m_instanceCountCats = 3;
+	m_instanceCountCats = 3;
 
 
 	// Create the instance array.
@@ -231,24 +240,24 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 		return false;
 	}
 
-	// Create the instance array.
-	//cat = new InstanceType[m_instanceCountCats];
-	//if (!cat)
-	//{
-	//	return false;
-	//}
+	/* Create the instance array.*/
+	/*cat = new InstanceType[m_instanceCountCats];
+	if (!cat)
+	{
+		return false;
+	}*/
 
 	// Load the instance array with data.
 	instances[0].position = XMFLOAT3(-1.5f, -1.5f, 5.0f);
 	instances[1].position = XMFLOAT3(-8.0f, -1.5f, 5.0f);
 	instances[2].position = XMFLOAT3(-15.0f, -1.5f, 5.0f);
-	//cat[0].position = XMFLOAT3(-1.5f, -1.5f, 10.0f);
-	//cat[1].position = XMFLOAT3(-8.0f, -6.5f, 5.0f);
-	//cat[2].position = XMFLOAT3(-7.0f, -10.5f, 5.0f);
+	/*cat[0].position = XMFLOAT3(-1.5f, -1.5f, 10.0f);
+	cat[1].position = XMFLOAT3(-8.0f, -6.5f, 5.0f);
+	cat[2].position = XMFLOAT3(-7.0f, -10.5f, 5.0f);*/
 
-	//instances[1].position = XMFLOAT3(5.0f, -1.5f, 5.0f);
-	//instances[2].position = XMFLOAT3(1.5f, -1.5f, 5.0f);
-	//instances[3].position = XMFLOAT3(1.5f, 1.5f, 5.0f);
+	/*instances[1].position = XMFLOAT3(5.0f, -1.5f, 5.0f);
+	instances[2].position = XMFLOAT3(1.5f, -1.5f, 5.0f);
+	instances[3].position = XMFLOAT3(1.5f, 1.5f, 5.0f);*/
 
 
 	// Set up the description of the instance buffer.
@@ -295,10 +304,11 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	delete[] instances;
 	instances = 0;
 
-	//delete[] cat;
-	//cat = 0;
+	delete[] cat;
+	cat = 0;
 	return true;
 }
+
 
 void ModelClass::ShutdownBuffers()
 {

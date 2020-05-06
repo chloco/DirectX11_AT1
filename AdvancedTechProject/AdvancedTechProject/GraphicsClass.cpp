@@ -66,7 +66,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd, Inp
 		return false;
 	}
 
-	m_CatModel->setPosition(-5.0f, -1.5f, 5.0f);
+	m_CatModel->setPosition(m_Model->getPosition().x, m_Model->getPosition().y, m_Model->getPosition().z);
+	m_CatModel->setScale(0.5, 1, 1);
 
 
 	// Initialize the model object.
@@ -159,6 +160,7 @@ bool GraphicsClass::Frame() //calls the render function in each frame
 
 	XMFLOAT3 pos = m_Camera->GetPosition();
 	XMFLOAT3 rot = m_Camera->GetRotation();
+	XMFLOAT3 scale = m_CatModel->getScale();
 
 	//m_CatModel->setPosition(catPos.y, catPos.x, catPos.y);
 	//W MOVES UP
@@ -217,6 +219,16 @@ bool GraphicsClass::Frame() //calls the render function in each frame
 		m_Camera->SetRotation(rot.x, rot.y, rot.z);
 	}
 
+	if (m_Input->IsKeyDown(VK_DOWN))
+	{
+
+			scale.x -= 0.3;
+			scale.z -= 0.3;
+			scale.y -= 0.3;
+			m_CatModel->setScale(scale.x,scale.y,scale.z);
+	
+	}
+
 	bool result;
 	
 	// Render the graphics scene.
@@ -245,14 +257,14 @@ bool GraphicsClass::Render()
 	m_Direct3D->GetWorldMatrix(worldMatrix);
 	m_Camera->GetViewMatrix(viewMatrix);
 	m_Direct3D->GetProjectionMatrix(projectionMatrix);
-	//m_CatModel->
+	
 
 	// Put the model vertex and index buffers on the graphics pipeline to prepare them for drawing.
 	m_Model->Render(m_Direct3D->GetDeviceContext());
 
 	// Render the model using the texture shader.
 	result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_Model->GetVertexCount(), m_Model->GetInstanceCount(), worldMatrix, viewMatrix,
-		projectionMatrix, m_Model->GetTexture());
+	projectionMatrix, m_Model->GetTexture());
 	if (!result)
 	{
 		return false;
@@ -261,7 +273,7 @@ bool GraphicsClass::Render()
 	m_CatModel->Render(m_Direct3D->GetDeviceContext());
 
 	// Render the model using the treadmill texture shader.
-	result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_CatModel->GetVertexCount(), m_CatModel->GetInstanceCount(), worldMatrix, viewMatrix,
+	result = m_TextureShader->Render(m_Direct3D->GetDeviceContext(), m_CatModel->GetVertexCount(), m_CatModel->GetCatInstanceCount(), worldMatrix, viewMatrix,
 		projectionMatrix, m_CatModel->GetTexture());
 	if (!result)
 	{
