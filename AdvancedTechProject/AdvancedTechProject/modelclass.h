@@ -104,7 +104,6 @@ private:
 	XMMATRIX treadmill;
 
 	XMMATRIX Rotation;
-	XMMATRIX Scale;
 	XMMATRIX Translation;
 };
 

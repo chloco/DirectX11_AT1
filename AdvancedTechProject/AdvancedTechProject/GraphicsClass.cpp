@@ -66,8 +66,8 @@ bool GraphicsClass::Initialize(int screenWidth, int screenHeight, HWND hwnd, Inp
 		return false;
 	}
 
-	m_CatModel->setPosition(m_Model->getPosition().x, m_Model->getPosition().y, m_Model->getPosition().z);
-	m_CatModel->setScale(0.5, 1, 1);
+	m_CatModel->setPosition(m_Model->getPosition().x, m_Model->getPosition().y + 0.3, m_Model->getPosition().z);
+	m_CatModel->setScale(2, 1, 1);
 
 
 	// Initialize the model object.

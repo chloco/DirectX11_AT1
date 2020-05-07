@@ -115,14 +115,14 @@ XMFLOAT3 ModelClass::getScale()
 	return scale;
 }
 
-XMMATRIX ModelClass::Scale()
-{
-	
-	FLOAT ScaleX;    // x=axis scale
-	FLOAT ScaleY;     // y-axis scale
-	FLOAT ScaleZ;    // z-axis scale
-
-}
+//XMMATRIX ModelClass::Scale
+//{
+//	
+//	FLOAT ScaleX;    // x=axis scale
+//	FLOAT ScaleY;     // y-axis scale
+//	FLOAT ScaleZ;    // z-axis scale
+//
+//}
 
 void ModelClass::setPosition(float x, float y, float z)
 {
@@ -304,8 +304,8 @@ bool ModelClass::InitializeBuffers(ID3D11Device* device)
 	delete[] instances;
 	instances = 0;
 
-	delete[] cat;
-	cat = 0;
+	/*delete[] cat;
+	cat = 0;*/
 	return true;
 }
 
